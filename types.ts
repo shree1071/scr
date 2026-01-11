@@ -24,8 +24,9 @@ export interface StepProps {
 }
 
 // --- App State Types ---
-export type AppView = 'landing' | 'onboarding' | 'dashboard';
-export type DashboardView = 'checkin' | 'tribe' | 'analytics' | 'rankings' | 'tools' | 'settings';
+export type AppView = 'landing' | 'signin' | 'signup' | 'type-selection' | 'onboarding' | 'dashboard' | 'bmsit-survey' | 'bmsit-results';
+export type UserType = 'company' | 'bmsit';
+export type DashboardView = 'checkin' | 'mood' | 'tribe' | 'support' | 'analytics' | 'rankings' | 'settings';
 
 export interface Company {
   id: string;
@@ -75,6 +76,9 @@ export interface Post {
     options: { label: string; votes: number }[];
     totalVotes: number;
   };
+  userId?: string;
+  userName?: string;
+  userInitials?: string;
 }
 
 // --- Insight Types ---

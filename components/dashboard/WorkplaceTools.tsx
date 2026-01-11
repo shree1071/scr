@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { PenTool, MessageCircle, Mail, Sparkles, RefreshCw, Copy, Check, ShieldAlert } from 'lucide-react';
+import { PenTool, MessageCircle, Mail, Sparkles, RefreshCw, Copy, Check, ShieldAlert, Lightbulb } from 'lucide-react';
+import WellnessTips from './WellnessTips';
 
 const WorkplaceTools: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'review' | 'script' | 'email'>('review');
+  const [activeTab, setActiveTab] = useState<'review' | 'script' | 'email' | 'wellness'>('review');
 
   // --- REVIEW WRITER STATE ---
   const [achievements, setAchievements] = useState('');
@@ -40,7 +41,7 @@ During this quarter, I successfully spearheaded several critical initiatives. Sp
 
 These efforts resulted in measurable improvements to team velocity and product stability. I demonstrated proactive leadership by identifying bottlenecks early and collaborating cross-functionally to resolve them. 
 
-Moving forward, I plan to leverage these wins to take on more strategic responsibilities within the department.`);
+Moving forward, I plan to leverage these wins to take on more strategic responsibilities within department.`);
       setIsGeneratingReview(false);
     }, 1500);
   };
@@ -52,11 +53,11 @@ Moving forward, I plan to leverage these wins to take on more strategic responsi
       if (scriptScenario === 'raise') {
         script = `**The "Ask" Script:**
 
-"Hi [Manager Name], thanks for making the time.
+"Hi [Manager Name], thanks for making time.
 
-I’d like to discuss my compensation. Over the last year, I’ve taken on additional responsibilities such as [Context: ${scriptContext || 'leading the new project'}], and achieved [Key Result].
+I'd like to discuss my compensation. Over the last year, I've taken on additional responsibilities such as [Context: ${scriptContext || 'leading new project'}], and achieved [Key Result].
 
-Based on my performance and current market rates for this level, I’m looking for an adjustment to [Target Salary]. I’m committed to this team and want to ensure my compensation reflects the value I’m delivering."`;
+Based on my performance and current market rates for this level, I'm looking for an adjustment to [Target Salary]. I'm committed to this team and want to ensure my compensation reflects the value I'm delivering."`;
       } else if (scriptScenario === 'boundaries') {
          script = `**The "No" Script:**
 
@@ -64,7 +65,7 @@ Based on my performance and current market rates for this level, I’m looking f
 
 Taking on [Context: ${scriptContext || 'this new task'}] right now would compromise the timeline for [Current Project]. 
 
-I propose we either pause the current project or schedule this new request for next sprint. Which would you prefer?"`;
+I propose we either pause the current project or schedule this new request for the next sprint. Which would you prefer?"`;
       } else {
         script = `**The "Feedback" Script:**
 
@@ -72,7 +73,7 @@ I propose we either pause the current project or schedule this new request for n
 
 When [Context: ${scriptContext || 'decisions are made without my input'}], it impacts my ability to execute on my goals. 
 
-In the future, could we ensure I'm included in the initial planning phase? This will help us avoid bottlenecks later on."`;
+In the future, could you ensure I'm included in the initial planning phase? This will help us avoid bottlenecks later on."`;
       }
       setScriptResult(script);
       setIsGeneratingScript(false);
@@ -83,8 +84,7 @@ In the future, could we ensure I'm included in the initial planning phase? This 
     if (!emailDraft.trim()) return;
     setIsPolishing(true);
     setTimeout(() => {
-        // Simple mock transformation
-        setEmailResult(`Hi Team,\n\nI wanted to follow up on the timeline for this project. Given our current capacity and the project scope, the proposed deadline presents a significant risk to quality.\n\nI recommend we adjust the delivery date to [Date] to ensure we meet our standards. Let me know if you'd like to discuss prioritization to make this happen.\n\nBest,\n[Your Name]`);
+        setEmailResult(`Hi Team,\n\nI wanted to follow up on the timeline for this project. Given our current capacity and project scope, the proposed deadline presents a significant risk to quality.\n\nI recommend we adjust the delivery date to [Date] to ensure we meet our standards. Let me know if you'd like to discuss prioritization to make this happen.\n\nBest,\n[Your Name]`);
         setIsPolishing(false);
     }, 1500);
   };
@@ -102,6 +102,7 @@ In the future, could we ensure I'm included in the initial planning phase? This 
                 { id: 'review', icon: PenTool, label: 'Review Writer', color: 'text-violet-500' },
                 { id: 'script', icon: MessageCircle, label: 'Script Doctor', color: 'text-pink-500' },
                 { id: 'email', icon: Mail, label: 'Email Polisher', color: 'text-blue-500' },
+                { id: 'wellness', icon: Lightbulb, label: 'Wellness Tips', color: 'text-emerald-500' },
             ].map((tab) => (
                 <button
                     key={tab.id}
@@ -125,7 +126,7 @@ In the future, could we ensure I'm included in the initial planning phase? This 
                 <div className="animate-slide-up grid md:grid-cols-2 gap-12">
                     <div className="space-y-6">
                         <div>
-                            <h3 className="text-2xl font-bold text-slate-900 mb-2">Self-Evaluations Sucks.</h3>
+                            <h3 className="text-2xl font-bold text-slate-900 mb-2">Self-Evaluations Suck.</h3>
                             <p className="text-slate-500 font-medium">
                                 Paste your rough bullet points (e.g. "fixed login bug", "helped sarah") and we'll turn it into professional corporate speak.
                             </p>
@@ -135,7 +136,7 @@ In the future, could we ensure I'm included in the initial planning phase? This 
                             <textarea
                                 value={achievements}
                                 onChange={(e) => setAchievements(e.target.value)}
-                                placeholder="- Shipped the new dark mode feature&#10;- Mentored 2 junior devs&#10;- Reduced server costs by 20%"
+                                placeholder="- Shipped new dark mode feature&#10;- Mentored 2 junior devs&#10;- Reduced server costs by 20%"
                                 className="w-full h-48 p-4 bg-violet-50/50 rounded-2xl border-2 border-violet-100 focus:outline-none focus:border-violet-400 focus:ring-4 focus:ring-violet-50 transition-all resize-none font-medium text-slate-700 placeholder:text-violet-300"
                             />
                         </div>
@@ -322,6 +323,11 @@ In the future, could we ensure I'm included in the initial planning phase? This 
                         )}
                     </div>
                 </div>
+            )}
+
+            {/* --- TOOL 4: WELLNESS TIPS --- */}
+            {activeTab === 'wellness' && (
+                <WellnessTips companyId="default" />
             )}
         </div>
     </div>

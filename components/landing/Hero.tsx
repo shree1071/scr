@@ -1,9 +1,6 @@
 import React from 'react';
 import { Lock, Heart, MessageCircle, Shield } from 'lucide-react';
-
-interface HeroProps {
-  onLogin: () => void;
-}
+import { SignUpButton } from '@clerk/clerk-react';
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -14,7 +11,7 @@ const GoogleIcon = () => (
   </svg>
 );
 
-const Hero: React.FC<HeroProps> = ({ onLogin }) => {
+const Hero: React.FC = () => {
   return (
     <section className="relative pt-20 pb-32 md:pt-32 md:pb-48 overflow-hidden">
       {/* Playful Background Elements */}
@@ -59,16 +56,15 @@ const Hero: React.FC<HeroProps> = ({ onLogin }) => {
             <MessageCircle size={32} fill="currentColor" className="opacity-80"/>
           </div>
 
-          <button 
-            onClick={onLogin}
-            className="group relative flex items-center justify-center w-full px-8 py-5 bg-slate-900 text-white rounded-2xl shadow-[0_10px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-all duration-300"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="relative flex items-center bg-white rounded-xl px-6 py-3 w-[calc(100%-8px)] h-[calc(100%-8px)] group-hover:bg-transparent group-hover:text-white transition-colors">
-                 <div className="group-hover:hidden"><GoogleIcon /></div>
-                 <span className="text-lg font-bold text-slate-800 group-hover:text-white mx-auto">Continue with Google</span>
-            </div>
-          </button>
+          <SignUpButton mode="modal">
+            <button className="group relative flex items-center justify-center w-full px-8 py-5 bg-slate-900 text-white rounded-2xl shadow-[0_10px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)] hover:-translate-y-1 transition-all duration-300">
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative flex items-center bg-white rounded-xl px-6 py-3 w-[calc(100%-8px)] h-[calc(100%-8px)] group-hover:bg-transparent group-hover:text-white transition-colors">
+                   <div className="group-hover:hidden"><GoogleIcon /></div>
+                   <span className="text-lg font-bold text-slate-800 group-hover:text-white mx-auto">Continue with Google</span>
+              </div>
+            </button>
+          </SignUpButton>
           
           <div className="flex items-center justify-center gap-2 text-sm text-slate-500 font-medium">
             <Shield className="w-4 h-4 text-emerald-500" />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Bot, User, Sparkles, ArrowRight, ArrowLeft, ClipboardList, Smile, Frown, Meh, Zap, Sun, Calendar, Flame, CloudRain, Printer, Download, BookOpen, Lightbulb, PenTool } from 'lucide-react';
 import { Message } from '../../types';
+import { generateGeminiResponse } from '../../lib/gemini';
 
 // --- Types & Constants ---
 
@@ -180,32 +181,43 @@ const AiChat: React.FC = () => {
     };
 
     setMessages(prev => [...prev, userMsg]);
+    const userInput = input;
     setInput('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      let aiResponseText = "That sounds tough. 🫂 Can you tell me more about how that made you feel?";
-      const lowerInput = userMsg.content.toLowerCase();
-      
-      if (lowerInput.includes('burnout') || lowerInput.includes('tired')) {
-        aiResponseText = "I hear you, and your feelings are valid. 💙 Burnout is real. Has your manager been supportive at all?";
-      } else if (lowerInput.includes('manager') || lowerInput.includes('boss')) {
-        aiResponseText = "Management styles make such a huge difference! 🏢 On a scale of 1-10, how psychologically safe do you feel with them?";
-      } else if (lowerInput.includes('good') || lowerInput.includes('happy')) {
-        aiResponseText = "Yay! 🎉 It's so important to celebrate the wins. What's one thing your team is doing right?";
-      }
+    try {
+      // Build conversation history for context (last 5 messages)
+      const recentMessages = messages.slice(-5).map(msg => ({
+        role: msg.role === 'user' ? 'user' : 'model' as const,
+        parts: [{ text: msg.content }]
+      }));
+
+      // Generate AI response using Gemini API
+      const aiResponseText = await generateGeminiResponse(userInput, recentMessages);
 
       const aiMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: aiResponseText,
         timestamp: new Date(),
-        tags: ['Empathy Mode']
+        tags: ['AI Response']
       };
       
       setMessages(prev => [...prev, aiMsg]);
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      // Fallback response on error
+      const aiMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: "I'm here to listen. Can you tell me more about what's on your mind? 💙",
+        timestamp: new Date(),
+        tags: ['Support']
+      };
+      setMessages(prev => [...prev, aiMsg]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const handleRate = (score: number) => {

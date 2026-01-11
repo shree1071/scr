@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Shield } from 'lucide-react';
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/clerk-react';
 
-interface NavbarProps {
-  onLogin: () => void;
-}
-
-const Navbar: React.FC<NavbarProps> = ({ onLogin }) => {
+const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -48,14 +45,23 @@ const Navbar: React.FC<NavbarProps> = ({ onLogin }) => {
           </a>
         </nav>
 
-        {/* CTA Button */}
-        <div>
-          <button 
-            onClick={onLogin}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 px-5 rounded-full transition-colors shadow-sm hover:shadow-md"
-          >
-            Continue with Google
-          </button>
+        {/* CTA Buttons */}
+        <div className="flex items-center gap-3">
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="text-slate-600 hover:text-indigo-600 text-sm font-medium transition-colors">
+                Sign In
+              </button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <button className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 px-5 rounded-full transition-colors shadow-sm hover:shadow-md">
+                Sign Up
+              </button>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </div>
       </div>
     </header>

@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { Company, DashboardView } from '../../types';
-import { Shield, MessageSquare, Users, BarChart2, Settings, LogOut, Menu, X, Heart, Trophy, Activity, ClipboardCheck, Briefcase } from 'lucide-react';
+import { Shield, MessageSquare, Users, BarChart2, Settings, LogOut, Menu, X, Heart, Trophy, Activity, ClipboardCheck, Brain, UserCircle } from 'lucide-react';
 import AiChat from './AiChat';
-import CommunityFeed from './CommunityFeed';
+
+
 import AnalyticsDashboard from './InsightsDashboard'; 
 import CompanyRankings from './CompanyRankings';
-import WorkplaceTools from './WorkplaceTools';
+import UserAccount from './UserAccount';
+import MoodTracker from './MoodTracker';
+import PeerSupport from './PeerSupport';
+import CommunityFeed from './CommunityFeed';
 
 interface DashboardLayoutProps {
   company: Company;
@@ -18,20 +22,22 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ company, onLogout }) 
 
   const navItems = [
     { id: 'checkin', label: 'Check-in', icon: ClipboardCheck },
+    { id: 'mood', label: 'Mood', icon: Brain },
     { id: 'tribe', label: 'Tribe', icon: Users },
+    { id: 'support', label: 'Support', icon: UserCircle },
     { id: 'analytics', label: 'Analytics', icon: BarChart2 },
-    { id: 'tools', label: 'Toolkit', icon: Briefcase },
     { id: 'rankings', label: 'Leaderboard', icon: Trophy },
   ];
 
   const renderContent = () => {
     switch (activeView) {
       case 'checkin': return <AiChat />;
-      case 'tribe': return <CommunityFeed />;
+      case 'mood': return <MoodTracker />;
+      case 'tribe': return <CommunityFeed companyId={company.id} />;
+      case 'support': return <PeerSupport companyId={company.id} />;
       case 'analytics': return <AnalyticsDashboard />;
-      case 'tools': return <WorkplaceTools />;
       case 'rankings': return <CompanyRankings />;
-      case 'settings': return <div className="text-center py-20 text-slate-500 font-medium">✨ Settings & Profile Controls ✨</div>;
+      case 'settings': return <UserAccount companyName={company.name} onLogout={onLogout} />;
       default: return <AiChat />;
     }
   };
